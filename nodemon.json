@@ -1,0 +1,6 @@
+{
+    "watch": ["src"],
+    "ext": "js,ts,json",
+    "exec": "nodemon typeorm-ts-node-commonjs",
+    "delay": 100
+}
