@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource(
         host: "localhost",
         port: 3306,
         username: "blog",
-        password: "blog-app",
+        password: "jasir-blog",
         database: "blog",
         entities: [User],
         migrations: [],
