@@ -1,22 +1,26 @@
-import { AppDataSource } from "./data-source"
-import { User } from "./entity/User"
+import { AppDataSource } from "../data-source"
+import express,{Request,Response} from 'express';
+import blogRoute from "./routes/blogRoutes"
+import userRoute from "./routes/userRoute"
+const bodyParser = require("body-parser");
+
+const app= express();
+const PORT= process.env.PORT || 3000;
 
 AppDataSource.initialize().then(async () => {
+console.log("Connected to DB!");
 
-    console.log("Inserting a new user into the database...")
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.email = "timbersaw@nmail.com"
-    user.age = 25
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-    await AppDataSource.manager.save(user)
-    console.log("Saved a new user with id is: " + user.id)
 
-    console.log("Loading users from the database...")
-    const users = await AppDataSource.manager.find(User)
-    console.log("Loaded users: ", users)
+app.use('/api/v1/',blogRoute)
+app.use('/api/v1/',userRoute)
 
-    console.log("Here you can setup and run express / fastify / any other framework.")
+
+app.listen(PORT,()=>{
+  console.log(`Server is listening on port ${PORT}`);
+})
+    
 
 }).catch(error => console.log(error))
