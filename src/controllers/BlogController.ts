@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
+import { AppDataSource } from '../../data-source';
+import { Blog } from '../entity/Blog';
 
 class BlogController {
-  static getAllBlogs(req: Request, res: Response) {
+  static async getAllBlogs(req: Request, res: Response) {
+
+    const blogRepository = AppDataSource.getRepository(Blog)
+
+    const blogs = await blogRepository.find()
+    
     return res.send(
       {
         status: "Success",
-        data: "Blogs",
+        data: blogs,
       }
     );
   }

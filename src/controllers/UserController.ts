@@ -21,11 +21,13 @@ class UserController {
 
     const userRepository = AppDataSource.getRepository(User)
 
-    const users = await userRepository.find()
+    const user = new User();
+
+    
     return res.send(
       {
         status: "success",
-        users: users
+        users: "users"
       }
     )
   }
