@@ -2,6 +2,7 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./src/entity/User"
 import { Blog } from "./src/entity/Blog"
+import { Widget } from "./src/entity/Widgets"
 
 export const AppDataSource = new DataSource(
     {
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource(
         username: "jasir",
         password: "jasir-blog",
         database: "blog",
-        entities: [User,Blog],
+        entities: [User,Blog,Widget],
         migrations: [],
         subscribers: [],
     }

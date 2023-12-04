@@ -8,15 +8,9 @@ export class User {
     id: number
 
     @Column()
-    firstName: string
+    name: string
 
-    @Column()
-    lastName: string
-
-    @Column()
-    age: number
-
-    @Column()
+    @Column({unique: true})
     email: string
 
     @Column({nullable: false})
