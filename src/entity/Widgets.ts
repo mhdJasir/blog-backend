@@ -28,6 +28,9 @@ export class Widget {
     text: string;
 
     @Column({ nullable: true })
+    image: string;
+
+    @Column({ nullable: true })
     width: number;
 
     @Column({ nullable: true })

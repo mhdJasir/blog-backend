@@ -18,7 +18,7 @@ class BlogController {
 
     const blogRepository = AppDataSource.getRepository(Blog)
 
-    const blogs = await blogRepository.find({ where: { user: req.user.id }, relations: ['widgets'] });
+    const blogs = await blogRepository.find({ where: { user: req.body.user.id }, relations: ['widgets'] });
 
     return res.send(
       {
@@ -34,17 +34,9 @@ class BlogController {
     const newBlog = new Blog();
     newBlog.title = title;
     newBlog.sub_title = sub_title;
-    newBlog.user = req.user.id;
+    newBlog.user = req.body.user.id;
    
     console.log(req.body);
-    
-
-
-    return res.send(req.body.widgets.type);
-
-    if (!Array.isArray(widgets) || widgets.length === 0) {
-      return res.status(400).json({ error: 'Widgets must be a non-empty array.' });
-    }
 
     try {
       await blogRepository.save(newBlog);
@@ -86,7 +78,8 @@ class BlogController {
     try {
       const widgetRepository = AppDataSource.getRepository(Widget);
       const { blog_id, type, content, font_size, font_color } = req.body;
-
+      console.log(req.body);
+      
       if (!type) {
         return createErrorResponse(400, 'Invalid request: Type is required.');
       }
@@ -112,6 +105,7 @@ class BlogController {
             if (!req.file) {
               return createErrorResponse(400, 'Invalid request: Image file is required for image widgets.');
             }
+            widget.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
             break;
           default:
             return createErrorResponse(400, 'Invalid request: Unsupported widget type.');
@@ -124,11 +118,12 @@ class BlogController {
           data: addedWidget,
         });
       } catch (e) {
-        console.error(e);
+        if(e.code=='ER_NO_REFERENCED_ROW_2'){
+          return createErrorResponse(400, 'Invalid request: There is no specified blog found');
+        }
         return createErrorResponse(500, 'Internal Server Error');
       }
     } catch (e) {
-      console.error(e);
       return createErrorResponse(500, 'Internal Server Error');
     }
   }
